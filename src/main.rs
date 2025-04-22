@@ -67,8 +67,7 @@ fn keyboard_input_system(
     ));
 }
 
-#[derive(Reflect, Component, Default)]
-#[reflect(Component)]
+#[derive(Component)]
 pub struct Lifetime(Timer);
 
 pub fn cleanup(
