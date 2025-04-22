@@ -7,7 +7,7 @@ pub struct SpawnTimer(Timer);
 fn main() -> AppExit {
     App::new()
         .add_plugins((DefaultPlugins, HanabiPlugin))
-        .add_systems(Startup, (setup_explosion, setup))
+        .add_systems(Startup, (setup_effect, setup))
         .add_systems(Update, (keyboard_input_system, spawn, cleanup))
         .run()
 }
@@ -44,9 +44,7 @@ fn spawn(
     };
 
     cmd.spawn((
-        Lifetime {
-            timer: Timer::from_seconds(1., TimerMode::Once),
-        },
+        Lifetime(Timer::from_seconds(1., TimerMode::Once)),
         ParticleEffect::new(my_effect.effect.clone()),
         Transform::from_translation(Vec3::splat(0.).with_y(20.)),
     ));
@@ -71,9 +69,7 @@ fn keyboard_input_system(
 
 #[derive(Reflect, Component, Default)]
 #[reflect(Component)]
-pub struct Lifetime {
-    pub timer: Timer,
-}
+pub struct Lifetime(Timer);
 
 pub fn cleanup(
     mut commands: Commands,
@@ -83,9 +79,9 @@ pub fn cleanup(
     my_effect: Res<ExplosionParticleEffect>,
 ) {
     for (entity, mut lifetime) in &mut q_values {
-        lifetime.timer.tick(time.delta());
+        lifetime.0.tick(time.delta());
 
-        if !lifetime.timer.just_finished() || commands.get_entity(entity).is_none() {
+        if !lifetime.0.just_finished() || commands.get_entity(entity).is_none() {
             continue;
         }
 
@@ -94,14 +90,12 @@ pub fn cleanup(
         commands.spawn((
             ParticleEffect::new(my_effect.effect.clone()),
             Transform::from_translation(Vec3::splat(0.).with_y(20.)),
-            Lifetime {
-                timer: Timer::from_seconds(1., TimerMode::Once),
-            },
+            Lifetime(Timer::from_seconds(1., TimerMode::Once)),
         ));
     }
 }
 
-pub(crate) fn setup_explosion(mut cmd: Commands, mut effects: ResMut<Assets<EffectAsset>>) {
+pub(crate) fn setup_effect(mut cmd: Commands, mut effects: ResMut<Assets<EffectAsset>>) {
     // Define a color gradient from red to transparent black
     let mut gradient = Gradient::new();
     gradient.add_key(0.0, Vec4::new(1., 0., 0., 1.));
