@@ -5,7 +5,7 @@ edition = "2024"
 
 [dependencies]
 bevy = "0.15.3"
-bevy_hanabi = {git = "https://github.com/NicoZweifel/bevy_hanabi", branch = "buffer_id_invalid"}
+bevy_hanabi = "0.15.0"
 
 [profile.dev]
 opt-level = 1
