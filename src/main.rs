@@ -75,8 +75,6 @@ pub fn cleanup(
     mut commands: Commands,
     mut q_values: Query<(Entity, &mut Lifetime)>,
     time: Res<Time>,
-
-    my_effect: Res<ExplosionParticleEffect>,
 ) {
     for (entity, mut lifetime) in &mut q_values {
         lifetime.0.tick(time.delta());
@@ -86,12 +84,6 @@ pub fn cleanup(
         }
 
         commands.entity(entity).despawn_recursive();
-
-        commands.spawn((
-            ParticleEffect::new(my_effect.effect.clone()),
-            Transform::from_translation(Vec3::splat(0.).with_y(20.)),
-            Lifetime(Timer::from_seconds(1., TimerMode::Once)),
-        ));
     }
 }
 
