@@ -675,7 +675,7 @@ dependencies = [
 [[package]]
 name = "bevy_hanabi"
 version = "0.15.0"
-source = "git+https://github.com/djeedai/bevy_hanabi?branch=main#0427b515ce4859bb52a087463adfc04f463bee4e"
+source = "git+https://github.com/NicoZweifel/bevy_hanabi?branch=buffer_id_invalid#1fcbc76d50ed5f593821fca7f99dbadb18106baf"
 dependencies = [
  "anyhow",
  "bevy",
